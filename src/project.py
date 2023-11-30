@@ -15,6 +15,7 @@ def main():
     snake = pygame.rect.Rect([0, 0, tile_size - 2, tile_size - 2])
     snake.center = get_random_position()
     length = 1
+    score = 0
     segments = [snake.copy()]
     snake_dir = (0,0)
     food = pygame.rect.Rect([0, 0, tile_size - 2, tile_size - 2])
@@ -57,7 +58,6 @@ def main():
         # draw food
         pygame.draw.rect(screen, red, food)
         #create score
-        score = 0
         smallfont = pygame.font.SysFont("comicsansms", 25)
         score_text = smallfont.render("Score: " + str(score), True, pygame.Color(255, 255, 255))
         screen.blit(score_text, (0,0))
