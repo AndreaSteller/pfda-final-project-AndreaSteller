@@ -48,7 +48,7 @@ def main():
         selfeating = pygame.Rect.collidelist(snake, segments[:-1]) != -1
         if snake.left < 0 or snake.right > window or snake.top < 0 or snake.bottom > window or selfeating:
             snake.center, food.center = get_random_position(), get_random_position()
-            length, snake_dir = 1, (0,0)
+            length, snake_dir, score = 1, (0,0), 0
             segments = [snake.copy()]
         # check food
         if snake.center == food.center:
