@@ -16,6 +16,7 @@ def main():
     snake.center = get_random_position()
     length = 1
     score = 0
+    high_score = 0
     segments = [snake.copy()]
     snake_dir = (0,0)
     food = pygame.rect.Rect([0, 0, tile_size - 2, tile_size - 2])
@@ -48,6 +49,8 @@ def main():
         selfeating = pygame.Rect.collidelist(snake, segments[:-1]) != -1
         if snake.left < 0 or snake.right > window or snake.top < 0 or snake.bottom > window or selfeating:
             snake.center, food.center = get_random_position(), get_random_position()
+            if high_score < score:
+                high_score = score
             length, snake_dir, score = 1, (0,0), 0
             segments = [snake.copy()]
         # check food
@@ -57,10 +60,13 @@ def main():
             score += 1
         # draw food
         pygame.draw.rect(screen, red, food)
-        #create score
+        #create current score
         smallfont = pygame.font.SysFont("comicsansms", 25)
         score_text = smallfont.render("Score: " + str(score), True, pygame.Color(255, 255, 255))
         screen.blit(score_text, (0,0))
+        #create high score
+        high_score_text = smallfont.render("High Score: " + str(high_score), True, pygame.Color(255, 255, 255))
+        screen.blit(high_score_text, (200, 0))
         # draw snake
         for segment in segments:
             pygame.draw.rect(screen, green, segment)
