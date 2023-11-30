@@ -53,8 +53,14 @@ def main():
         if snake.center == food.center:
             food.center = get_random_position()
             length += 1
+            score += 1
         # draw food
         pygame.draw.rect(screen, red, food)
+        #create score
+        score = 0
+        smallfont = pygame.font.SysFont("comicsansms", 25)
+        score_text = smallfont.render("Score: " + str(score), True, pygame.Color(255, 255, 255))
+        screen.blit(score_text, (0,0))
         # draw snake
         for segment in segments:
             pygame.draw.rect(screen, green, segment)
