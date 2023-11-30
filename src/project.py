@@ -16,6 +16,8 @@ def main():
     length = 1
     segments = [snake.copy()]
     snake_dir = (0,0)
+    food = pygame.rect.Rect([0, 0, tile_size - 2, tile_size - 2])
+    food.center = get_random_position()
     time, time_step = 0, 110
     screen = pygame.display.set_mode(window_res)
     running = True
@@ -34,7 +36,9 @@ def main():
                     snake_dir = (tile_size, 0)
         black = pygame.Color(0, 0, 0)
         green = pygame.Color(0, 200, 0)
+        red = pygame.Color(200, 0, 0)
         screen.fill(black)
+        pygame.draw.rect(screen, red, food)
         for segment in segments:
             pygame.draw.rect(screen, green, segment)
         time_now = pygame.time.get_ticks()
