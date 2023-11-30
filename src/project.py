@@ -6,9 +6,10 @@ def main():
     pygame.init()
     pygame.display.set_caption("Snake")
     clock = pygame.time.Clock()
-    window = 600
+    dirs = {pygame.K_w: 1, pygame.K_s: 1, pygame.K_a: 1, pygame.K_d: 1}
+    window = 700
     window_res = (700, 700)
-    tile_size = 40
+    tile_size = 35
     range = (tile_size // 2, window - tile_size // 2, tile_size)
     get_random_position = lambda: [random.randrange(*range), random.randrange(*range)]
     snake = pygame.rect.Rect([0, 0, tile_size - 2, tile_size - 2])
@@ -26,21 +27,38 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_w and dirs[pygame.K_w]:
                     snake_dir = (0, -tile_size)
-                if event.key == pygame.K_s:
+                    dirs = {pygame.K_w: 0, pygame.K_s: 1, pygame.K_a: 1, pygame.K_d: 1}
+                if event.key == pygame.K_s and dirs[pygame.K_s]:
                     snake_dir = (0, tile_size)
-                if event.key == pygame.K_a:
+                    dirs = {pygame.K_w: 1, pygame.K_s: 0, pygame.K_a: 1, pygame.K_d: 1}
+                if event.key == pygame.K_a and dirs[pygame.K_a]:
                     snake_dir = (-tile_size, 0)
-                if event.key == pygame.K_d:
+                    dirs = {pygame.K_w: 1, pygame.K_s: 1, pygame.K_a: 0, pygame.K_d: 1}
+                if event.key == pygame.K_d and dirs[pygame.K_d]:
                     snake_dir = (tile_size, 0)
+                    dirs = {pygame.K_w: 1, pygame.K_s: 1, pygame.K_a: 1, pygame.K_d: 0}
         black = pygame.Color(0, 0, 0)
         green = pygame.Color(0, 200, 0)
         red = pygame.Color(200, 0, 0)
         screen.fill(black)
+        # check border or self eating / restart
+        selfeating = pygame.Rect.collidelist(snake, segments[:-1]) != -1
+        if snake.left < 0 or snake.right > window or snake.top < 0 or snake.bottom > window or selfeating:
+            snake.center, food.center = get_random_position(), get_random_position()
+            length, snake_dir = 1, (0,0)
+            segments = [snake.copy()]
+        # check food
+        if snake.center == food.center:
+            food.center = get_random_position()
+            length += 1
+        # draw food
         pygame.draw.rect(screen, red, food)
+        # draw snake
         for segment in segments:
             pygame.draw.rect(screen, green, segment)
+        # move snake
         time_now = pygame.time.get_ticks()
         if time_now - time > time_step:
             time = time_now
